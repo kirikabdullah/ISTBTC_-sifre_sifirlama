@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Directory | Self-Service Şifre Sıfırlama Portalı</title>
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <!-- Ambient Grid Cyber Background -->
+    <div class="cyber-grid"></div>
+    <div class="glow-orb orb-blue"></div>
+    <div class="glow-orb orb-orange"></div>
+
+    <div class="portal-container">
+        
+        <!-- Header -->
+        <header class="portal-header">
+            <div class="shield-logo">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h1>ISTBTC</h1>
+            <p>Active Directory Güvenli Şifre Yönetimi</p>
+        </header>
+
+        <!-- SSPR Main Card -->
+        <main class="portal-card">
+            
+            <!-- Step Progress Indicator -->
+            <div class="progress-bar-container">
+                <div class="progress-step active" id="p-step-1">
+                    <span class="step-num">1</span>
+                    <span class="step-lbl">Kimlik</span>
+                </div>
+                <div class="progress-line" id="p-line-1"></div>
+                <div class="progress-step" id="p-step-2">
+                    <span class="step-num">2</span>
+                    <span class="step-lbl">Doğrulama</span>
+                </div>
+                <div class="progress-line" id="p-line-2"></div>
+                <div class="progress-step" id="p-step-3">
+                    <span class="step-num">3</span>
+                    <span class="step-lbl">Yeni Şifre</span>
+                </div>
+            </div>
+
+            <!-- Form Wrapper -->
+            <div class="form-wrapper">
+                
+                <!-- AŞAMA 1: Kullanıcı Sorgulama -->
+                <section class="form-step-section active" id="section-step-1">
+                    <div class="step-header">
+                        <h2>Kullanıcı Doğrulama</h2>
+                        <p>Şifresini sıfırlamak istediğiniz Active Directory sAMAccountName (Kullanıcı Adı) bilgisini girin.</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="username"><i class="fa-regular fa-user"></i> AD Kullanıcı Adı</label>
+                        <input type="text" id="username" placeholder="örn: abdullah.kirik" autocomplete="off" required>
+                        <span class="input-helper">Kullanıcı adınız 'adadı.soyadı' veya 'ogrenci.no' formatında olabilir.</span>
+                    </div>
+
+                    <button class="portal-btn" id="btn-next-1">
+                        Devam Et <i class="fa-solid fa-arrow-right-long"></i>
+                    </button>
+                </section>
+
+                <!-- AŞAMA 2: Güvenlik OTP Doğrulaması -->
+                <section class="form-step-section" id="section-step-2">
+                    <div class="step-header">
+                        <h2>Güvenlik Doğrulaması</h2>
+                        <p>Active Directory'de hesabınıza kayıtlı olan e-posta adresine bir doğrulama kodu gönderildi.</p>
+                    </div>
+
+                    <div class="security-info-box">
+                        <i class="fa-solid fa-envelope"></i>
+                        <div>
+                            <strong>Kayıtlı E-posta:</strong>
+                            <span id="display-masked-email">ahm***@lab.local</span>
+                        </div>
+                    </div>
+
+                    <!-- OTP Input -->
+                    <div class="input-group text-center">
+                        <label for="otp-code"><i class="fa-solid fa-key"></i> 6 Haneli Doğrulama Kodu</label>
+                        <div class="otp-input-container">
+                            <input type="text" id="otp-code" maxlength="6" placeholder="000000" class="otp-field" autocomplete="off">
+                        </div>
+                        <span class="input-helper">Lab/Demo kolaylığı için test kodu console logunda veya <strong class="code-highlight">123456</strong> yazarak geçebilirsiniz.</span>
+                    </div>
+
+                    <div class="btn-actions-row">
+                        <button class="portal-btn btn-secondary" id="btn-back-2">
+                            <i class="fa-solid fa-arrow-left-long"></i> Geri
+                        </button>
+                        <button class="portal-btn" id="btn-next-2">
+                            Kodu Doğrula <i class="fa-solid fa-shield-checkmark"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- AŞAMA 3: Yeni Şifre Oluşturma -->
+                <section class="form-step-section" id="section-step-3">
+                    <div class="step-header">
+                        <h2>Yeni Şifre Belirle</h2>
+                        <p>Şifreniz Active Directory Güvenlik Politikası ve karmaşıklık kurallarına uygun olmalıdır.</p>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="new-password"><i class="fa-solid fa-lock"></i> Yeni Şifre</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="new-password" placeholder="••••••••••••" required>
+                            <button type="button" class="toggle-password-btn" id="toggle-pwd-1">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Password Strength Meter UI -->
+                    <div class="strength-meter-container">
+                        <div class="strength-bar-track">
+                            <div class="strength-bar" id="pwd-strength-bar"></div>
+                        </div>
+                        <div class="strength-label-row">
+                            <span>Şifre Gücü:</span>
+                            <span id="pwd-strength-txt" class="strength-low">Çok Zayıf</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="confirm-password"><i class="fa-solid fa-lock"></i> Yeni Şifre Tekrar</label>
+                        <div class="password-input-wrapper">
+                            <input type="password" id="confirm-password" placeholder="••••••••••••" required>
+                            <button type="button" class="toggle-password-btn" id="toggle-pwd-2">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Password Requirements Checklist -->
+                    <div class="requirements-checklist">
+                        <div class="req-item" id="req-length">
+                            <i class="fa-solid fa-circle-xmark status-x"></i> En az 8 Karakter uzunluğunda
+                        </div>
+                        <div class="req-item" id="req-upper">
+                            <i class="fa-solid fa-circle-xmark status-x"></i> En az bir büyük harf (A-Z)
+                        </div>
+                        <div class="req-item" id="req-number">
+                            <i class="fa-solid fa-circle-xmark status-x"></i> En az bir rakam (0-9)
+                        </div>
+                        <div class="req-item" id="req-special">
+                            <i class="fa-solid fa-circle-xmark status-x"></i> En az bir özel karakter (örn: !, @, #, $)
+                        </div>
+                    </div>
+
+                    <button class="portal-btn" id="btn-submit-reset" disabled>
+                        Şifreyi Active Directory'de Güncelle <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </button>
+                </section>
+
+                <!-- AŞAMA 4: BAŞARILI SONUÇ -->
+                <section class="form-step-section" id="section-step-success">
+                    <div class="success-screen">
+                        <div class="success-glowing-shield">
+                            <i class="fa-solid fa-shield-circle-check"></i>
+                        </div>
+                        <h2>Şifre Başarıyla Değiştirildi</h2>
+                        <p id="success-message">Tebrikler Abdullah Kirik, şifreniz Active Directory üzerinde anlık olarak güncellendi ve doğrulandı.</p>
+                        
+                        <div class="security-log-box">
+                            <div class="log-title">GÜVENLİK LEDGER BİLGİSİ</div>
+                            <div class="log-line"><span class="log-lbl">Dizin Türü:</span> <span class="log-val text-blue">Active Directory (sAMAccountName)</span></div>
+                            <div class="log-line"><span class="log-lbl">Protokol:</span> <span class="log-val text-blue" id="success-protocol">LDAP / unicodePwd Modification</span></div>
+                            <div class="log-line"><span class="log-lbl">Durum:</span> <span class="log-val text-green">SUCCESS // COMMITTED</span></div>
+                        </div>
+
+                        <button class="portal-btn" id="btn-restart">
+                            <i class="fa-solid fa-rotate-left"></i> Yeni İşlem Başlat
+                        </button>
+                    </div>
+                </section>
+                
+            </div>
+            
+        </main>
+        
+        <!-- Footer -->
+        <footer class="portal-footer">
+            <p>Active Directory Lab-SSPR &copy; 2026. Kurumsal Siber Güvenlik Altyapısı.</p>
+        </footer>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
